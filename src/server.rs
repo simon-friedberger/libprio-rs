@@ -9,6 +9,7 @@ use crate::polynomial::*;
 use crate::prng;
 use crate::util;
 use crate::util::*;
+use anyhow::{anyhow, ensure, Context, Result};
 
 /// Auxiliary memory for constructing a
 /// [`VerificationMessage`](struct.VerificationMessage.html)
@@ -82,8 +83,8 @@ impl Server {
         &mut self,
         eval_at: Field,
         share: &[u8],
-    ) -> Option<VerificationMessage> {
-        let share_field = self.deserialize_share(share).ok()?;
+    ) -> Result<VerificationMessage> {
+        let share_field = self.deserialize_share(share)?;
         generate_verification_message(
             self.dimension,
             eval_at,
@@ -91,6 +92,7 @@ impl Server {
             self.is_first_server,
             &mut self.validation_mem,
         )
+        .context("generate verification message failed")
     }
 
     /// Add the content of the encrypted share into the accumulator
