@@ -250,13 +250,13 @@ pub struct Prio3VerifyParam {
     pub aggregator_id: u8,
 
     /// Length in field elements of an uncompressed input share.
-    input_len: usize,
+    pub input_len: usize,
 
     /// Length in field elements of an uncompressed proof.
-    proof_len: usize,
+    pub proof_len: usize,
 
     /// Length of the joint randomness.
-    joint_rand_len: usize,
+    pub joint_rand_len: usize,
 }
 
 /// The message sent by the client to each aggregator. This includes the client's input share and
@@ -271,7 +271,7 @@ pub struct Prio3InputShare<F> {
 
     /// Parameters used by the Aggregator to compute the joint randomness. This field is optional
     /// because not every [`pcp::Type`] requires joint randomness.
-    joint_rand_param: Option<JointRandParam>,
+    pub joint_rand_param: Option<JointRandParam>,
 }
 
 impl<F: FieldElement> Encode for Prio3InputShare<F> {
@@ -821,12 +821,12 @@ where
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-struct JointRandParam {
+pub struct JointRandParam {
     /// The sum of the joint randomness seed shares sent to the other Aggregators.
-    seed_hint: Key,
+    pub seed_hint: Key,
 
     /// The blinding factor, used to derive the aggregator's joint randomness seed share.
-    blind: Key,
+    pub blind: Key,
 }
 
 #[derive(Clone)]
