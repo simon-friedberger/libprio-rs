@@ -28,3 +28,13 @@ jobs:
       run: cargo test --verbose --all-features
     - name: Build benchmarks
       run: cargo bench --no-run
+    - name: Check documentation (default features)
+      env:
+        CARGO_TARGET_DIR: "target/doc-deny"
+        RUSTDOCFLAGS: "-Dwarnings"
+      run: cargo doc
+    - name: Check documentation (all features)
+      env:
+        CARGO_TARGET_DIR: "target/doc-deny"
+        RUSTDOCFLAGS: "-Dwarnings"
+      run: cargo doc --all-features
