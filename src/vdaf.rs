@@ -527,5 +527,7 @@ pub mod prg;
 #[cfg(feature = "prio2")]
 pub mod prio2;
 pub mod prio3;
+#[cfg(feature = "internal_prg")]
+pub mod prio3_instances;
 #[cfg(test)]
 mod prio3_test;

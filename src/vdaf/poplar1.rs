@@ -30,7 +30,9 @@ use crate::codec::{
     decode_u16_items, decode_u24_items, encode_u16_items, encode_u24_items, CodecError, Decode,
     Encode, ParameterizedDecode,
 };
-use crate::field::{split_vector, FieldElement};
+#[cfg(feature = "internal_prg")]
+use crate::field::split_vector;
+use crate::field::FieldElement;
 use crate::fp::log2;
 use crate::prng::Prng;
 use crate::vdaf::prg::{Prg, Seed};
@@ -157,6 +159,7 @@ pub struct ToyIdpf<F> {
     level: usize,
 }
 
+#[cfg(feature = "internal_prg")]
 impl<F: FieldElement> Idpf<2, 2> for ToyIdpf<F> {
     type Field = F;
 
@@ -351,6 +354,7 @@ where
     }
 }
 
+#[cfg(feature = "internal_prg")]
 impl<I, P, const L: usize> Client for Poplar1<I, P, L>
 where
     I: Idpf<2, 2>,

@@ -6,7 +6,9 @@
 //! NOTE: The public API for this module is a work in progress.
 
 use crate::field::{FieldElement, FieldError};
-use crate::vdaf::prg::{SeedStream, SeedStreamAes128};
+use crate::vdaf::prg::SeedStream;
+#[cfg(feature = "internal_prg")]
+use crate::vdaf::prg::SeedStreamAes128;
 
 use getrandom::getrandom;
 
@@ -33,6 +35,7 @@ pub(crate) struct Prng<F, S> {
     output_written: usize,
 }
 
+#[cfg(feature = "internal_prg")]
 impl<F: FieldElement> Prng<F, SeedStreamAes128> {
     /// Create a [`Prng`] from a seed for Prio 2. The first 16 bytes of the seed and the last 16
     /// bytes of the seed are used, respectively, for the key and initialization vector for AES128

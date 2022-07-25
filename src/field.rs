@@ -635,6 +635,7 @@ pub(crate) fn merge_vector<F: FieldElement>(
 }
 
 /// Outputs an additive secret sharing of the input.
+#[cfg(feature = "internal_prg")]
 pub(crate) fn split_vector<F: FieldElement>(
     inp: &[F],
     num_shares: usize,
@@ -658,6 +659,7 @@ pub(crate) fn split_vector<F: FieldElement>(
 }
 
 /// Generate a vector of uniform random field elements.
+#[cfg(feature = "internal_prg")]
 pub fn random_vector<F: FieldElement>(len: usize) -> Result<Vec<F>, PrngError> {
     Ok(Prng::new()?.take(len).collect())
 }

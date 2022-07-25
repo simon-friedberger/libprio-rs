@@ -5,11 +5,14 @@
 //! [draft-irtf-cfrg-vdaf-01]: https://datatracker.ietf.org/doc/draft-irtf-cfrg-vdaf/01/
 
 use crate::vdaf::{CodecError, Decode, Encode};
+#[cfg(feature = "internal_prg")]
 use aes::{
     cipher::{KeyIvInit, StreamCipher},
     Aes128,
 };
+#[cfg(feature = "internal_prg")]
 use cmac::{Cmac, Mac};
+#[cfg(feature = "internal_prg")]
 use ctr::Ctr64BE;
 use std::{
     fmt::{Debug, Formatter},
@@ -128,8 +131,10 @@ pub trait Prg<const L: usize>: Clone + Debug {
 ///
 /// [draft-irtf-cfrg-vdaf-01]: https://datatracker.ietf.org/doc/draft-irtf-cfrg-vdaf/01/
 #[derive(Clone, Debug)]
+#[cfg(feature = "internal_prg")]
 pub struct PrgAes128(Cmac<Aes128>);
 
+#[cfg(feature = "internal_prg")]
 impl Prg<16> for PrgAes128 {
     type SeedStream = SeedStreamAes128;
 
@@ -148,14 +153,17 @@ impl Prg<16> for PrgAes128 {
 }
 
 /// The key stream produced by AES128 in CTR-mode.
+#[cfg(feature = "internal_prg")]
 pub struct SeedStreamAes128(Ctr64BE<Aes128>);
 
+#[cfg(feature = "internal_prg")]
 impl SeedStreamAes128 {
     pub(crate) fn new(key: &[u8], iv: &[u8]) -> Self {
         SeedStreamAes128(Ctr64BE::<Aes128>::new(key.into(), iv.into()))
     }
 }
 
+#[cfg(feature = "internal_prg")]
 impl SeedStream for SeedStreamAes128 {
     fn fill(&mut self, buf: &mut [u8]) {
         buf.fill(0);
@@ -163,6 +171,7 @@ impl SeedStream for SeedStreamAes128 {
     }
 }
 
+#[cfg(feature = "internal_prg")]
 impl Debug for SeedStreamAes128 {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         // Ctr64BE<Aes128> does not implement Debug, but [`ctr::CtrCore`][1] does, and we get that
